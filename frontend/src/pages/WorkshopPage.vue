@@ -22,7 +22,7 @@ const handleSubmit = async () => {
   videoStore.videoInfo = null
   videoStore.url = url.value
   try {
-    const resp = await fetch('/api/videos/parse', {
+    const resp = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/videos/parse`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url: url.value }),

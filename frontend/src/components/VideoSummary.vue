@@ -419,7 +419,7 @@ async function startSummarize() {
 
     // 2. SSE 流式总结
     const transcript = subtitleData.value.full_text || `Video title: ${props.videoTitle}.`
-    const resp = await fetch('/api/ai/summary', {
+    const resp = await fetch(`${apiBase}/api/ai/summary`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: props.videoTitle, transcript, language: currentLang.value }),
@@ -459,7 +459,7 @@ async function loadSubtitles() {
   subtitleData.value = { segments: [], full_text: '' }
   const lang = 'auto'
   try {
-    const subResp = await fetch('/api/videos/subtitles', {
+    const subResp = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/videos/subtitles`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url: props.videoUrl, language: lang }),
     })
@@ -486,7 +486,7 @@ async function translateSubtitles() {
   if (!subtitleData.value.full_text || translating.value) return
   translating.value = true
   try {
-    const resp = await fetch('/api/subtitles/translate', {
+    const resp = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/subtitles/translate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: subtitleData.value.full_text, target_language: currentLang.value }),
@@ -530,7 +530,7 @@ async function sendQuestion() {
   chatMessages.value.push(aiMsg)
   chatLoading.value = true
   try {
-    const resp = await fetch('/api/ai/qa', {
+    const resp = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/ai/qa`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ transcript: subtitleData.value.full_text || `Video: ${props.videoTitle}`, question, language: currentLang.value }),
