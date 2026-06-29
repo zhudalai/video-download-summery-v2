@@ -395,7 +395,8 @@ async function startSummarize() {
   try {
     // 1. 加载字幕
     const lang = 'auto'
-    const subResp = await fetch('/api/videos/subtitles', {
+    const apiBase = import.meta.env.VITE_API_URL || ''
+    const subResp = await fetch(`${apiBase}/api/videos/subtitles`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url: props.videoUrl, language: lang }),

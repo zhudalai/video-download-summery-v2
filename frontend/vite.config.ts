@@ -26,4 +26,6 @@ export default defineConfig({
       },
     },
   },
+  // 生产环境:直接请求后端 URL(由 VITE_API_URL 环境变量控制)
+  // 开发环境:用上面的 proxy
 })

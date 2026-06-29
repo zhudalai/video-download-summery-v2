@@ -316,3 +316,30 @@ async def translate_srt_async(srt_content: str, target_language: str) -> str:
         except (json.JSONDecodeError, KeyError):
             result += raw
     return result
+
+
+async def translate_srt_async(srt_content: str, target_language: str) -> str:
+    """调用 LLM 翻译 SRT 字幕。"""
+    import json
+    from app.config import get_settings
+    from app.config.router import get_route
+    from app.prompts.templates import get_prompt, build_messages
+    from app.services.llm_client import LLMClient
+
+    settings = get_settings()
+    prompt = get_prompt("v1_translate")
+    messages = build_messages(prompt, title="", transcript=srt_content, language=target_language)
+    llm = LLMClient(settings.OPENROUTER_API_KEY)
+    route = get_route(target_language)
+    result = ""
+    async for raw in llm.stream_with_fallback(messages, route, request=None):
+        # 解析 OpenAI 兼容的 SSE chunk
+        try:
+            data = json.loads(raw)
+            delta = data.get("choices", [{}])[0].get("delta", {})
+            content = delta.get("content")
+            if content:
+                result += content
+        except (json.JSONDecodeError, KeyError):
+            result += raw
+    return result
