@@ -7,13 +7,16 @@ settings = get_settings()
 
 app = FastAPI(title="AI Video Summary API", version="0.1.0")
 
-# CORS:允许前端域名 + 本地开发
-allowed_origins = [settings.FRONTEND_URL]
-if settings.APP_ENV == "development":
-    allowed_origins += ["http://localhost:5173", "http://127.0.0.1:5173"]
-# 也允许 Cloudflare Pages 默认域名
-if ".pages.dev" not in settings.FRONTEND_URL:
-    allowed_origins.append("https://*.pages.dev")
+# CORS:允许所有前端域名(生产 + 开发)
+allowed_origins = [
+    "https://video-download-summery.vercel.app",
+    "https://video-download-summery-k9tos3dgq-zhu-yanjun-s-projects.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+# 也允许用户配置的 FRONTEND_URL
+if settings.FRONTEND_URL and settings.FRONTEND_URL not in allowed_origins:
+    allowed_origins.append(settings.FRONTEND_URL)
 
 app.add_middleware(
     CORSMiddleware,
