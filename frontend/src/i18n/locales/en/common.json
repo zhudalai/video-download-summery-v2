@@ -1,0 +1,108 @@
+{
+  "common": {
+    "appName": "AI Video Summary",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "noThumbnail": "No thumbnail"
+  },
+  "nav": {
+    "home": "Home",
+    "download": "Download",
+    "billing": "Billing",
+    "login": "Sign In",
+    "signup": "Sign Up",
+    "logout": "Logout"
+  },
+  "download": {
+    "title": "Download & Summarize",
+    "placeholder": "Paste video URL here...",
+    "submit": "Analyze",
+    "parsing": "Parsing video info...",
+    "success": "Ready to download",
+    "error": {
+      "invalid_url": "Invalid video URL",
+      "unsupported": "Unsupported platform",
+      "blacklisted": "This platform is not supported"
+    }
+  },
+  "summary": {
+    "title": "AI Summary",
+    "loadingSubtitles": "Loading subtitles...",
+    "generating": "Generating summary...",
+    "error": {
+      "failed": "Summary generation failed"
+    },
+    "empty": "Click to view summary",
+    "viewLink": "View AI Summary",
+    "needVideo": "Please parse a video first",
+    "mindmap": "Mind Map",
+    "qa": "Ask a question",
+    "export": "Export"
+  },
+  "qa": {
+    "title": "Q&A",
+    "empty": "Ask questions about this video",
+    "example": "e.g. \"What is the main idea of this video?\"",
+    "placeholder": "Type your question...",
+    "send": "Send"
+  },
+  "video": {
+    "quality": "Quality",
+    "formats": "{count} formats",
+    "downloadNow": "Download Now"
+  },
+  "subtitle": {
+    "loading": "Loading subtitles...",
+    "copy": "Copy",
+    "download": "Download",
+    "translate_to": "Translate to",
+    "translating": "Translating...",
+    "show_original": "Show Original",
+    "show_translated": "Show Translated",
+    "expand": "Expand All",
+    "collapse": "Collapse",
+    "no_subtitles": "No subtitles available for this video",
+    "rate_limited": "Subtitle download rate limited, please try again later",
+    "translate_error": "Translation failed"
+  },
+  "workspace": {
+    "inputPlaceholder": "Paste a video URL...",
+    "analyzeBtn": "Analyze",
+    "parsing": "Parsing...",
+    "emptyTitle": "Paste a video URL to get started",
+    "emptyDesc": "Supports 1800+ platforms like YouTube, Bilibili, TikTok"
+  },
+  "tab": {
+    "summary": "Summary",
+    "subtitle": "Subtitles",
+    "mindmap": "Mind Map",
+    "qa": "AI Q&A"
+  },
+  "mindmap": {
+    "zoom_in": "Zoom In",
+    "zoom_out": "Zoom Out",
+    "fit": "Fit",
+    "fullscreen": "Fullscreen",
+    "exit_fullscreen": "Exit Fullscreen",
+    "generating": "Generating mind map...",
+    "need_summary": "Generate summary first to view mind map"
+  },
+  "format": {
+    "1080p": "1080P",
+    "720p": "720P",
+    "audio_only": "Audio Only",
+    "best": "Best Quality",
+    "need_merge": "(auto merge audio)"
+  },
+  "billing": {
+    "title": "Upgrade to Pro",
+    "free": "Free",
+    "pro": "Pro",
+    "premium": "Premium",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "subscribe": "Subscribe",
+    "current_plan": "Current Plan"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "common": {
+    "appName": "AI 動画サマリー",
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "retry": "再試行",
+    "noThumbnail": "サムネイルなし"
+  },
+  "nav": {
+    "home": "ホーム",
+    "download": "ダウンロード",
+    "billing": "プラン",
+    "login": "ログイン",
+    "signup": "新規登録",
+    "logout": "ログアウト"
+  },
+  "download": {
+    "title": "ダウンロードと要約",
+    "placeholder": "動画URLを貼り付け...",
+    "submit": "分析",
+    "parsing": "動画情報を解析中...",
+    "success": "ダウンロード可能",
+    "error": {
+      "invalid_url": "無効なURLです",
+      "unsupported": "サポートされていないプラットフォームです",
+      "blacklisted": "このプラットフォームはサポートされていません"
+    }
+  },
+  "summary": {
+    "title": "AI 要約",
+    "loadingSubtitles": "字幕を読み込み中...",
+    "generating": "要約を生成中...",
+    "error": {
+      "failed": "要約の生成に失敗"
+    },
+    "empty": "クリックして要約を表示",
+    "viewLink": "AI要約を見る",
+    "needVideo": "まず動画を解析してください",
+    "mindmap": "マインドマップ",
+    "qa": "質問",
+    "export": "エクスポート"
+  },
+  "qa": {
+    "title": "AI 質問",
+    "empty": "動画の字幕について質問する",
+    "example": "例:\"この動画の主なアイデアは?\"",
+    "placeholder": "質問を入力...",
+    "send": "送信"
+  },
+  "video": {
+    "quality": "画質",
+    "formats": "{count}フォーマット",
+    "downloadNow": "今すぐダウンロード"
+  },
+  "subtitle": {
+    "loading": "字幕読み込み中...",
+    "copy": "コピー",
+    "download": "ダウンロード",
+    "translate_to": "翻訳先",
+    "translating": "翻訳中...",
+    "show_original": "原文表示",
+    "show_translated": "訳文表示",
+    "expand": "展開",
+    "collapse": "折りたたみ",
+    "no_subtitles": "この動画には字幕がありません",
+    "rate_limited": "字幕ダウンロードが制限されています。後でもう一度お試しください",
+    "translate_error": "翻訳に失敗しました"
+  },
+  "workspace": {
+    "inputPlaceholder": "動画URLを貼り付け...",
+    "analyzeBtn": "分析",
+    "parsing": "解析中...",
+    "emptyTitle": "動画URLを入力してください",
+    "emptyDesc": "YouTube、Bilibili、TikTok などの 1800+ プラットフォームに対応"
+  },
+  "tab": {
+    "summary": "要約",
+    "subtitle": "字幕",
+    "mindmap": "マインドマップ",
+    "qa": "AI 質問"
+  },
+  "mindmap": {
+    "zoom_in": "拡大",
+    "zoom_out": "縮小",
+    "fit": "フィット",
+    "fullscreen": "フルスクリーン",
+    "exit_fullscreen": "フルスクリーン終了",
+    "generating": "マインドマップを生成中...",
+    "need_summary": "マインドマップを表示するには、最初に要約を生成してください"
+  },
+  "format": {
+    "1080p": "1080P",
+    "720p": "720P",
+    "audio_only": "音声のみ",
+    "best": "最高画質",
+    "need_merge": "(音声自動結合)"
+  },
+  "billing": {
+    "title": "Pro にアップグレード",
+    "free": "無料",
+    "pro": "Pro",
+    "premium": "Premium",
+    "monthly": "月額",
+    "yearly": "年額",
+    "subscribe": "購読",
+    "current_plan": "現在のプラン"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "common": {
+    "appName": "AI 视频总结器",
+    "loading": "加载中...",
+    "error": "出错了",
+    "retry": "重试",
+    "noThumbnail": "无封面"
+  },
+  "nav": {
+    "home": "首页",
+    "download": "下载",
+    "billing": "会员",
+    "login": "登录",
+    "signup": "注册",
+    "logout": "退出"
+  },
+  "download": {
+    "title": "下载与总结",
+    "placeholder": "粘贴视频链接...",
+    "submit": "分析",
+    "parsing": "正在解析视频信息...",
+    "success": "可以下载",
+    "error": {
+      "invalid_url": "无效的视频链接",
+      "unsupported": "不支持的平台",
+      "blacklisted": "该平台暂不支持"
+    }
+  },
+  "summary": {
+    "title": "AI 总结",
+    "loadingSubtitles": "加载字幕中...",
+    "generating": "正在生成总结...",
+    "error": {
+      "failed": "总结生成失败"
+    },
+    "empty": "点击查看总结",
+    "viewLink": "查看 AI 总结",
+    "needVideo": "请先解析视频",
+    "mindmap": "思维导图",
+    "qa": "提问",
+    "export": "导出"
+  },
+  "qa": {
+    "title": "问答",
+    "empty": "基于视频字幕提问,AI 将为你解答",
+    "example": "例如:\"这个视频的核心观点是什么?\"",
+    "placeholder": "输入你的问题...",
+    "send": "发送"
+  },
+  "video": {
+    "quality": "清晰度",
+    "formats": "{count} 个格式",
+    "downloadNow": "立即下载"
+  },
+  "subtitle": {
+    "loading": "加载字幕中...",
+    "copy": "复制",
+    "download": "下载",
+    "translate_to": "翻译为",
+    "translating": "翻译中...",
+    "show_original": "显示原文",
+    "show_translated": "显示译文",
+    "expand": "展开全部",
+    "collapse": "收起",
+    "no_subtitles": "该视频暂无可用字幕",
+    "rate_limited": "字幕下载被限流,请稍后再试",
+    "translate_error": "翻译失败"
+  },
+  "workspace": {
+    "inputPlaceholder": "粘贴视频链接...",
+    "analyzeBtn": "解析视频",
+    "parsing": "解析中...",
+    "emptyTitle": "输入视频链接开始",
+    "emptyDesc": "支持 YouTube、B站、抖音等 1800+ 平台"
+  },
+  "tab": {
+    "summary": "总结摘要",
+    "subtitle": "字幕文本",
+    "mindmap": "思维导图",
+    "qa": "AI 问答"
+  },
+  "mindmap": {
+    "zoom_in": "放大",
+    "zoom_out": "缩小",
+    "fit": "适应",
+    "fullscreen": "全屏",
+    "exit_fullscreen": "退出全屏",
+    "generating": "正在生成思维导图...",
+    "need_summary": "请先生成总结以查看思维导图"
+  },
+  "format": {
+    "1080p": "1080P",
+    "720p": "720P",
+    "audio_only": "仅音频",
+    "best": "最佳质量",
+    "need_merge": "(自动合并音视频)"
+  },
+  "billing": {
+    "title": "升级会员",
+    "free": "免费版",
+    "pro": "Pro 版",
+    "premium": "Premium 版",
+    "monthly": "按月",
+    "yearly": "按年",
+    "subscribe": "订阅",
+    "current_plan": "当前套餐"
+  }
+}
