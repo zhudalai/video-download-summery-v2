@@ -20,7 +20,8 @@ class Settings(BaseSettings):
     STRIPE_WEBHOOK_SECRET: str = "whsec_xxxxxxxx"
 
     # YouTube Cookie(解决 429 限流)
-    YOUTUBE_COOKIE_PATH: str = ""
+    # 优先从环境变量读取,如果没有则尝试默认路径
+    YOUTUBE_COOKIE_PATH: str = "data/youtube_cookie.txt"
     YOUTUBE_COOKIE: str = ""
 
     # App

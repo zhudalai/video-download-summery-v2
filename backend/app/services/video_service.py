@@ -33,6 +33,11 @@ def _get_ydl_opts(extra: dict | None = None) -> dict:
     # Cookie 支持:优先用文件,其次用环境变量文本
     cookie_path = settings.YOUTUBE_COOKIE_PATH
     cookie_text = settings.YOUTUBE_COOKIE
+    # 如果路径是相对路径,转为绝对路径(相对于项目根目录)
+    if cookie_path and not os.path.isabs(cookie_path):
+        # 从当前文件位置向上找到项目根目录
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        cookie_path = os.path.join(project_root, cookie_path)
     if cookie_path and os.path.exists(cookie_path):
         opts['cookiefile'] = cookie_path
     elif cookie_text:
