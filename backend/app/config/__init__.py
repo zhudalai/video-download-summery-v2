@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     STRIPE_SECRET_KEY: str = "sk_test_xxxxxxxx"
     STRIPE_WEBHOOK_SECRET: str = "whsec_xxxxxxxx"
 
+    # YouTube Cookie(解决 429 限流)
+    YOUTUBE_COOKIE_PATH: str = ""
+    YOUTUBE_COOKIE: str = ""
+
     # App
     APP_ENV: str = "development"
     APP_URL: str = "http://localhost:8000"

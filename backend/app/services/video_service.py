@@ -21,16 +21,34 @@ def is_blacklisted(url: str) -> bool:
     return any(blacklisted in domain for blacklisted in BLACKLISTED_DOMAINS)
 
 
+def _get_ydl_opts(extra: dict | None = None) -> dict:
+    """构建 ydl_opts,自动注入 Cookie(如果有)"""
+    import os
+    from app.config import get_settings
+    settings = get_settings()
+    opts = {
+        'quiet': True,
+        'no_warnings': True,
+    }
+    # Cookie 支持:优先用文件,其次用环境变量文本
+    cookie_path = settings.YOUTUBE_COOKIE_PATH
+    cookie_text = settings.YOUTUBE_COOKIE
+    if cookie_path and os.path.exists(cookie_path):
+        opts['cookiefile'] = cookie_path
+    elif cookie_text:
+        # yt-dlp 支持 cookies 参数直接传文本
+        opts['cookies'] = cookie_text
+    if extra:
+        opts.update(extra)
+    return opts
+
+
 def extract_video_info(url: str) -> dict:
     """
     快速解析视频信息(不下载视频)
     返回: title, duration, description, thumbnail, formats, subtitles
     """
-    ydl_opts = {
-        'quiet': True,
-        'no_warnings': True,
-        'extract_flat': False,
-    }
+    ydl_opts = _get_ydl_opts({'extract_flat': False})
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         return {
@@ -114,9 +132,7 @@ def download_subtitles(url: str, language: str = 'en', output_dir: str = None) -
     if output_dir is None:
         output_dir = tempfile.mkdtemp(prefix="vds_sub_")
 
-    ydl_opts: dict = {
-        'quiet': True,
-        'no_warnings': True,
+    ydl_opts = _get_ydl_opts({
         'skip_download': True,
         'writesubtitles': True,
         'writeautomaticsub': True,
@@ -124,7 +140,7 @@ def download_subtitles(url: str, language: str = 'en', output_dir: str = None) -
         'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
         'impersonate': 'chrome',
         'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
-    }
+    })
     if language and language.lower() not in ('auto', 'all', ''):
         ydl_opts['subtitleslangs'] = [language]
 
@@ -168,21 +184,16 @@ def download_video_to_temp(url: str, format_id: str) -> Optional[str]:
     output_dir = tempfile.mkdtemp(prefix="vds_vid_")
 
     if format_id == "best":
-        # 最佳质量:视频流 + 音频流,ffmpeg 合并
-        ydl_opts = {
-            'quiet': True,
-            'no_warnings': True,
-            'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+        ydl_opts = _get_ydl_opts({
+            'format': 'bestvideo[ext=mp4]+best_audio[ext=m4a]/best[ext=mp4]/best',
             'merge_output_format': 'mp4',
             'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
-        }
+        })
     else:
-        ydl_opts = {
-            'quiet': True,
-            'no_warnings': True,
+        ydl_opts = _get_ydl_opts({
             'format': format_id,
             'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
-        }
+        })
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -239,22 +250,15 @@ def download_subtitles_text(url: str, language: str = 'en') -> Optional[str]:
     """
     output_dir = tempfile.mkdtemp(prefix="vds_sub_")
 
-    ydl_opts: dict = {
-        'quiet': True,
-        'no_warnings': True,
+    ydl_opts = _get_ydl_opts({
         'skip_download': True,
         'writesubtitles': True,
         'writeautomaticsub': True,
         'subtitlesformat': 'srt',
         'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
-        # 绕过 YouTube 反爬:使用 impersonate + 客户端伪装
         'impersonate': 'chrome',
-        'extractor_args': {
-            'youtube': {
-                'player_client': ['android', 'web'],
-            }
-        },
-    }
+        'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
+    })
     # 只有指定了具体语言时才过滤;auto/空 → 下载所有可用字幕
     if language and language.lower() not in ('auto', 'all', ''):
         ydl_opts['subtitleslangs'] = [language]
