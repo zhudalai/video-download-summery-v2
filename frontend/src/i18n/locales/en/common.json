@@ -64,7 +64,9 @@
     "collapse": "Collapse",
     "no_subtitles": "No subtitles available for this video",
     "rate_limited": "Subtitle download rate limited, please try again later",
-    "translate_error": "Translation failed"
+    "translate_error": "Translation failed",
+    "count": "{count} subtitles",
+    "original": "Original"
   },
   "workspace": {
     "inputPlaceholder": "Paste a video URL...",

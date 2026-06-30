@@ -114,6 +114,77 @@ async def get_subtitles(req: SubtitlesRequest):
         raise HTTPException(status_code=500, detail=f"字幕获取失败: {str(e)}")
 
 
+@router.get("/download/subtitles")
+async def download_subtitles_file(url: str, lang: str = "auto", fmt: str = "srt"):
+    """下载字幕文件(SRT/VTT/TXT)。"""
+    if is_blacklisted(url):
+        raise HTTPException(status_code=403, detail="该平台暂不支持")
+    try:
+        # 获取字幕文本
+        result = await download_subtitles_text_async(url, lang)
+        if not result:
+            raise HTTPException(status_code=404, detail="该视频无可用字幕")
+        # 格式转换
+        content = _convert_subtitle_format(result, fmt)
+        # 返回文件
+        from fastapi.responses import PlainTextResponse
+        media_type = "text/plain" if fmt == "txt" else "text/srt" if fmt == "srt" else "text/vtt"
+        filename = f"subtitle.{fmt}"
+        return PlainTextResponse(
+            content=content,
+            media_type=media_type,
+            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"字幕下载失败: {str(e)}")
+
+
+def _convert_subtitle_format(text: str, fmt: str) -> str:
+    """将字幕文本转换为指定格式(SRT/VTT/TXT)。"""
+    import re
+    # 解析字幕文本(假设是空格或换行分隔的纯文本)
+    lines = [l.strip() for l in text.split("\n") if l.strip()]
+    if fmt == "txt":
+        return "\n".join(lines)
+    # SRT 格式
+    if fmt == "srt":
+        srt_content = ""
+        for i, line in enumerate(lines, 1):
+            start = _seconds_to_srt_time((i - 1) * 5)
+            end = _seconds_to_srt_time(i * 5)
+            srt_content += f"{i}\n{start} --> {end}\n{line}\n\n"
+        return srt_content
+    # VTT 格式
+    if fmt == "vtt":
+        vtt_content = "WEBVTT\n\n"
+        for i, line in enumerate(lines, 1):
+            start = _seconds_to_vtt_time((i - 1) * 5)
+            end = _seconds_to_vtt_time(i * 5)
+            vtt_content += f"{start} --> {end}\n{line}\n\n"
+        return vtt_content
+    return "\n".join(lines)
+
+
+def _seconds_to_srt_time(seconds: float) -> str:
+    """秒数转 SRT 时间格式 HH:MM:SS,mmm"""
+    h = int(seconds // 3600)
+    m = int((seconds % 3600) // 60)
+    s = int(seconds % 60)
+    ms = int((seconds % 1) * 1000)
+    return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
+
+
+def _seconds_to_vtt_time(seconds: float) -> str:
+    """秒数转 VTT 时间格式 HH:MM:SS.mmm"""
+    h = int(seconds // 3600)
+    m = int((seconds % 3600) // 60)
+    s = int(seconds % 60)
+    ms = int((seconds % 1) * 1000)
+    return f"{h:02d}:{m:02d}:{s:02d}.{ms:03d}"
+
+
 class VideoDownloadRequest(BaseModel):
     url: str
     format_id: str = "best"

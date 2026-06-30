@@ -30,8 +30,13 @@
     "title": "AI 总结",
     "loadingSubtitles": "加载字幕中...",
     "generating": "正在生成总结...",
+    "loadingMessage": "正在提取视频字幕...",
+    "analyzing": "AI 正在分析视频内容...",
     "error": {
-      "failed": "总结生成失败"
+      "failed": "总结生成失败",
+      "requestFailed": "总结请求失败",
+      "downloadFailed": "下载失败",
+      "answerFailed": "回答失败"
     },
     "empty": "点击查看总结",
     "viewLink": "查看 AI 总结",
@@ -64,7 +69,9 @@
     "collapse": "收起",
     "no_subtitles": "该视频暂无可用字幕",
     "rate_limited": "字幕下载被限流,请稍后再试",
-    "translate_error": "翻译失败"
+    "translate_error": "翻译失败",
+    "count": "{count} 条字幕",
+    "original": "原始"
   },
   "workspace": {
     "inputPlaceholder": "粘贴视频链接...",

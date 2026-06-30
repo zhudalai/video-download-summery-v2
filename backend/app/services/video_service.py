@@ -129,6 +129,12 @@ def download_subtitles(url: str, language: str = 'en', output_dir: str = None) -
         'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
         'impersonate': 'chrome',
         'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
+        # 重试机制:应对 YouTube 429 限流
+        'retries': 5,
+        'extractor_retries': 3,
+        'file_access_retries': 3,
+        'fragment_retries': 3,
+        'sleep_interval': 5,
     })
     if language and language.lower() not in ('auto', 'all', ''):
         ydl_opts['subtitleslangs'] = [language]
@@ -136,16 +142,16 @@ def download_subtitles(url: str, language: str = 'en', output_dir: str = None) -
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
-        # 查找下载的字幕文件
-        for f in Path(output_dir).glob(f'*.{language}.srt'):
-            return str(f)
-        # 如果没有找到,尝试任何 srt 文件
+        # 查找下载的字幕文件(优先匹配指定语言,否则匹配任意 srt)
+        if language and language.lower() not in ('auto', 'all', ''):
+            for f in Path(output_dir).glob(f'*.{language}.srt'):
+                return str(f)
+        # fallback: 匹配任意 srt 文件
         for f in Path(output_dir).glob('*.srt'):
             return str(f)
     except Exception as e:
         print(f"Subtitle download error: {e}")
-    finally:
-        # 清理临时目录
+        # 出错时清理临时目录
         shutil.rmtree(output_dir, ignore_errors=True)
     return None
 

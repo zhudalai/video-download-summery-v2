@@ -37,9 +37,9 @@
         <div v-if="subtitleData.segments && subtitleData.segments.length > 0">
           <div class="flex items-center justify-between mb-4">
             <div class="text-sm text-gray-500">
-              共 {{ (showTranslated ? translatedSegments : subtitleData.segments).length }} 条字幕
+              {{ t('subtitle.count', { count: (showTranslated ? translatedSegments : subtitleData.segments).length }) }}
               <span v-if="subtitleData.language" class="ml-2 px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs">
-                {{ showTranslated ? currentLang.toUpperCase() : (subtitleData.language || '原始') }}
+                {{ showTranslated ? currentLang.toUpperCase() : (subtitleData.language || t('subtitle.original')) }}
               </span>
             </div>
             <div class="flex items-center gap-2">
@@ -66,6 +66,15 @@
           <p v-if="subtitleError === 'rate_limited'" class="text-sm">⚠️ {{ t('subtitle.rate_limited') }}</p>
           <p v-else class="text-sm">{{ t('subtitle.no_subtitles') }}</p>
           <button @click="loadSubtitles" class="mt-3 text-xs text-primary hover:underline">{{ t('common.retry') }}</button>
+        </div>
+        <!-- 字幕下载按钮 -->
+        <div v-if="subtitleData.segments && subtitleData.segments.length > 0" class="mt-4 pt-3 border-t border-gray-200">
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-gray-500">{{ t('subtitle.download') }}:</span>
+            <button @click="downloadSubtitles('srt')" class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">SRT</button>
+            <button @click="downloadSubtitles('vtt')" class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">VTT</button>
+            <button @click="downloadSubtitles('txt')" class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">TXT</button>
+          </div>
         </div>
       </div>
 
@@ -225,7 +234,7 @@ function formatTime(seconds: number) {
 
 function generateMindmapMarkdown(summary: string) {
   const lines = summary.split('\n')
-  let nodes = ['# 视频总结']
+  let nodes = ['# ' + t('summary.mindmap')]
   for (const line of lines) {
     const trimmed = line.trim()
     if (!trimmed) continue
@@ -372,7 +381,7 @@ async function downloadMindmapPng() {
   const img = new Image()
   img.onload = () => {
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-    canvas.toBlob((blob) => { if (blob) triggerDownload(blob, getSafeFilename() + ' - 思维导图.png') }, 'image/png')
+    canvas.toBlob((blob) => { if (blob) triggerDownload(blob, getSafeFilename() + ' - ' + t('summary.mindmap') + '.png') }, 'image/png')
   }
   img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)))
 }
@@ -382,7 +391,7 @@ function downloadMindmapSvg() {
   const cloned = mindmapSvg.value.cloneNode(true) as Element
   setFullViewBox(cloned)
   const svgString = serializeSvg(cloned)
-  triggerDownload(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }), getSafeFilename() + ' - 思维导图.svg')
+  triggerDownload(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }), getSafeFilename() + ' - ' + t('summary.mindmap') + '.svg')
 }
 
 // ===== SSE 加载字幕 + 总结 =====
@@ -390,7 +399,7 @@ async function startSummarize() {
   loading.value = true
   summaryText.value = ''
   mindmapMarkdown.value = ''
-  loadingMessage.value = '正在提取视频字幕...'
+  loadingMessage.value = t('summary.loadingMessage')
 
   try {
     // 1. 加载字幕
@@ -414,7 +423,7 @@ async function startSummarize() {
         subtitleData.value = { segments: [], full_text: '', language: rawData.language }
         subtitleError.value = rawData.error || 'no_subtitles'
       }
-      loadingMessage.value = 'AI 正在分析视频内容...'
+      loadingMessage.value = t('summary.analyzing')
     }
 
     // 2. SSE 流式总结
@@ -425,7 +434,7 @@ async function startSummarize() {
       body: JSON.stringify({ title: props.videoTitle, transcript, language: currentLang.value }),
     })
 
-    if (!resp.ok || !resp.body) throw new Error('总结请求失败')
+    if (!resp.ok || !resp.body) throw new Error(t('summary.error.requestFailed'))
     const reader = resp.body.getReader()
     const decoder = new TextDecoder()
     let buffer = ''
@@ -449,7 +458,7 @@ async function startSummarize() {
     loading.value = false
   } catch (e: any) {
     loading.value = false
-    summaryText.value = '总结生成失败: ' + e.message
+    summaryText.value = t('summary.error.failed') + ': ' + e.message
   }
 }
 
@@ -478,6 +487,28 @@ async function loadSubtitles() {
     }
   } catch (e) {
     subtitleError.value = 'rate_limited'
+  }
+}
+
+// ===== 字幕下载 =====
+async function downloadSubtitles(fmt: string) {
+  const apiBase = import.meta.env.VITE_API_URL || ''
+  const url = `${apiBase}/api/videos/download/subtitles?url=${encodeURIComponent(props.videoUrl)}&lang=auto&fmt=${fmt}`
+  try {
+    const resp = await fetch(url)
+    if (!resp.ok) throw new Error(t('summary.error.downloadFailed'))
+    const blob = await resp.blob()
+    // 创建下载链接
+    const downloadUrl = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = downloadUrl
+    a.download = `subtitle.${fmt}`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(downloadUrl)
+  } catch (e) {
+    console.error('Subtitle download error:', e)
   }
 }
 
@@ -535,7 +566,7 @@ async function sendQuestion() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ transcript: subtitleData.value.full_text || `Video: ${props.videoTitle}`, question, language: currentLang.value }),
     })
-    if (!resp.ok || !resp.body) throw new Error('请求失败')
+    if (!resp.ok || !resp.body) throw new Error(t('summary.error.requestFailed'))
     const reader = resp.body.getReader()
     const decoder = new TextDecoder()
     let buffer = ''
@@ -558,7 +589,7 @@ async function sendQuestion() {
     }
     aiMsg.loading = false
   } catch (e: any) {
-    aiMsg.content = '回答失败: ' + e.message
+    aiMsg.content = t('summary.error.answerFailed') + ': ' + e.message
     aiMsg.loading = false
   } finally {
     chatLoading.value = false
