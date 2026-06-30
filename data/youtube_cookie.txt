@@ -1,1 +1,0 @@
-.youtube.com	TRUE	/	TRUE	1817345173	PREF	tz=Asia.Tokyo&f4=4000000&f6=40000000&f7=100
