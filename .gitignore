@@ -87,7 +87,5 @@ Thumbs.db
 # Playwright
 .playwright-mcp/
 
-# YouTube Cookie(敏感信息,不提交 Git)
-backend/data/
 
 .vercel

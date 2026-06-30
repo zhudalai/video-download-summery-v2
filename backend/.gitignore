@@ -7,3 +7,5 @@ build/
 .eggs/
 *.egg-info/
 node_modules/
+
+.vercel
