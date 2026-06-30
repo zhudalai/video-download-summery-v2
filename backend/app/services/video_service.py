@@ -30,22 +30,16 @@ def _get_ydl_opts(extra: dict | None = None) -> dict:
         'quiet': True,
         'no_warnings': True,
     }
-    # Cookie 支持:优先用环境变量文本,其次用文件,最后用内置 Cookie
-    cookie_text = settings.YOUTUBE_COOKIE
-    if cookie_text:
-        opts['cookies'] = cookie_text
+    # Cookie 支持:始终使用 cookiefile(yt-dlp 不支持 cookies 文本参数)
+    cookie_path = settings.YOUTUBE_COOKIE_PATH
+    if cookie_path and not os.path.isabs(cookie_path):
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        cookie_path = os.path.join(project_root, cookie_path)
+    if cookie_path and os.path.exists(cookie_path):
+        opts['cookiefile'] = cookie_path
     else:
-        # 尝试从文件读取
-        cookie_path = settings.YOUTUBE_COOKIE_PATH
-        # 如果路径是相对路径,转为绝对路径(相对于项目根目录)
-        if cookie_path and not os.path.isabs(cookie_path):
-            project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-            cookie_path = os.path.join(project_root, cookie_path)
-        if cookie_path and os.path.exists(cookie_path):
-            opts['cookiefile'] = cookie_path
-        else:
-            # 最后 fallback:使用内置 Cookie(解决 429 限流)
-            opts['cookiefile'] = _get_builtin_cookie_path()
+        # fallback:从环境变量或内置 Cookie 生成 Netscape 格式文件
+        opts['cookiefile'] = _get_builtin_cookie_path()
     if extra:
         opts.update(extra)
     return opts
@@ -54,25 +48,22 @@ def _get_ydl_opts(extra: dict | None = None) -> dict:
 def _get_builtin_cookie_path() -> str:
     """获取内置 Cookie 文件路径(作为 fallback)"""
     import os
-    # 内置 Cookie 内容(从用户浏览器导出)
-    builtin_cookie = (
-        ".youtube.com\tTRUE\t/\tTRUE\t1817345173\tPREF\ttz=Asia.Tokyo&f4=4000000&f6=40000000&f7=100; "
-        ".youtube.com\tTRUE\t/\tTRUE\t1791622062\t__Secure-BUCKET\tCNQE; "
-        ".youtube.com\tTRUE\t/\tTRUE\t1812524846\t__Secure-YENID\t15.YT; "
-        # ... (完整 Cookie 太长,这里用文件 fallback)
-    )
-    # 实际使用:写入临时文件
     import tempfile
+    from app.config import get_settings
+    settings = get_settings()
     cookie_dir = tempfile.mkdtemp(prefix="vds_cookie_")
     cookie_file = os.path.join(cookie_dir, "youtube_cookie.txt")
-    # 从 data 目录复制(如果存在)
-    data_cookie = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-        "data", "youtube_cookie.txt"
-    )
-    if os.path.exists(data_cookie):
-        import shutil
-        shutil.copy2(data_cookie, cookie_file)
+    # 获取 Cookie 文本(环境变量优先,其次代码内置)
+    cookie_text = settings.YOUTUBE_COOKIE
+    if cookie_text:
+        # 转换格式: 单行紧凑格式 -> Netscape 格式
+        # 输入: ".youtube.com\tTRUE\t/...; .youtube.com\tTRUE\t/..."
+        # 输出: 每行一个 Cookie,Tab 分隔
+        cookie_lines = [line.strip() for line in cookie_text.split(';') if line.strip()]
+        with open(cookie_file, 'w') as f:
+            f.write("# Netscape HTTP Cookie File\n")
+            for line in cookie_lines:
+                f.write(line + "\n")
     return cookie_file
 
 
