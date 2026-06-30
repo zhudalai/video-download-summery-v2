@@ -246,11 +246,11 @@ def download_subtitles_text(url: str, language: str = 'en') -> Optional[str]:
     ydl_opts = _get_ydl_opts({
         'skip_download': True,
         'writesubtitles': True,
-        'writeautomaticsub': True,
+        # 注意:不启用 writeautomaticsub,否则 yt-dlp 默认尝试下载 en 自动字幕(429)
         'subtitlesformat': 'srt',
         'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
     })
-    # 只有指定了具体语言时才过滤;auto/空 → 下载所有可用字幕
+    # 指定具体语言时才过滤;auto/空 → 下载所有人工字幕
     if language and language.lower() not in ('auto', 'all', ''):
         ydl_opts['subtitleslangs'] = [language]
 
