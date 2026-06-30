@@ -127,8 +127,6 @@ def download_subtitles(url: str, language: str = 'en', output_dir: str = None) -
         'writeautomaticsub': True,
         'subtitlesformat': 'srt',
         'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
-        'impersonate': 'chrome',
-        'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
         # 重试机制:应对 YouTube 429 限流
         'retries': 5,
         'extractor_retries': 3,
@@ -251,8 +249,6 @@ def download_subtitles_text(url: str, language: str = 'en') -> Optional[str]:
         'writeautomaticsub': True,
         'subtitlesformat': 'srt',
         'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
-        'impersonate': 'chrome',
-        'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
     })
     # 只有指定了具体语言时才过滤;auto/空 → 下载所有可用字幕
     if language and language.lower() not in ('auto', 'all', ''):
