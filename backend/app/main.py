@@ -34,7 +34,7 @@ app.include_router(auth.router)
 
 @app.get("/api/health")
 async def health_check():
-    return {"status": "ok", "version": "0.1.0"}
+    return {"status": "ok", "version": "0.1.0", "commit": "c033da5"}
 
 
 @app.get("/")
