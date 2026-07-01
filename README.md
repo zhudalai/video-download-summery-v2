@@ -1,13 +1,45 @@
-# AI 万能视频下载总结器
+# AI 万能视频下载总结器 / AI Video Downloader & Summarizer / AI動画ダウンロード＆要約ツール
 
 > 输入视频链接,自动解析 1800+ 平台,AI 视频总结 + 思维导图 + 问答 + 字幕下载 + 多语言翻译。
+>
+> Paste a video URL to auto-parse 1800+ platforms, with AI summary + mindmap + Q&A + subtitle download + multi-language translation.
+>
+> 動画URLを入力すると、1800以上のプラットフォームを自動解析し、AI要約＋マインドマップ＋質疑応答＋字幕ダウンロード＋多言語翻訳を提供します。
 
 [![Vue 3](https://img.shields.io/badge/Vue-3.x-42b883)](https://vuejs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688)](https://fastapi.tiangolo.com/)
 [![Python](https://img.shields.io/badge/Python-3.12+-3776ab)](https://python.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-## ✨ 功能特性
+[English](#english) | [中文](#中文) | [日本語](#日本語)
+
+---
+
+## English
+
+### Features
+- 🎬 **Video Parsing** — Supports YouTube, Vimeo, Dailymotion and 1800+ platforms (via yt-dlp)
+- 📥 **Video Download** — Quality options (1080P/720P/Audio only), auto ffmpeg merge
+- 📝 **AI Summary** — OpenRouter streaming Markdown summary (SSE real-time)
+- 🧠 **Mind Map** — Interactive markmap with zoom/fullscreen/PNG(4K)/SVG export
+- 💬 **AI Q&A** — RAG-based Q&A with streaming answers
+- 📄 **Subtitle Download** — Original subtitles in SRT/VTT/TXT formats
+- 🌐 **Subtitle Translation** — On-demand LLM translation (any language pair)
+- 🌍 **Multi-language** — English / Chinese / Japanese, one-click switch for all UI + AI content
+
+### Tech Highlights
+- Single-page workshop design, no page navigation
+- SSE streaming (summary/Q&A real-time display)
+- Tab content retention (v-show, no reload)
+- 4 tabs loaded simultaneously (Summary/Subtitles/Mindmap/Q&A)
+- Responsive layout, mobile-friendly
+- Auto-regenerate all content on language switch
+
+---
+
+## 中文
+
+### ✨ 功能特性
 
 ### 核心功能
 - 🎬 **视频解析** — 支持 YouTube、Vimeo、Dailymotion 等 1800+ 平台(基于 yt-dlp)
@@ -237,4 +269,26 @@ MIT License
 
 ---
 
-**开发工具**: 本项目使用 Claude Code 辅助开发。
+## 日本語
+
+### 機能
+- 🎬 **動画解析** — YouTube、Vimeo、Dailymotionなど1800以上のプラットフォームに対応(yt-dlpベース)
+- 📥 **動画ダウンロード** — 高画質選択(1080P/720P/音声のみ)、ffmpeg自動マージ
+- 📝 **AI要約** — OpenRouterストリーミングMarkdown要約(SSEリアルタイム)
+- 🧠 **マインドマップ** — インタラクティブmarkmap、ズーム/フルスクリーン/PNG(4K)/SVG書き出し対応
+- 💬 **AI質問応答** — 動画内容に基づくRAG質問応答、ストリーミング回答
+- 📄 **字幕ダウンロード** — オリジナル字幕をSRT/VTT/TXT形式で書き出し
+- 🌐 **字幕翻訳** — オリジナル字幕ダウンロード＋LLMオンデマンド翻訳(任意の言語ペア)
+- 🌍 **多言語対応** — 英語/中国語/日本語、ワンクリックで全UI＋AI内容を切替
+
+### 技術ハイライト
+- シングルページワークショップ設計、ページ遷移なし
+- SSEストリーミング出力(要約/質問応答リアルタイム表示)
+- Tab切替内容保持(v-show、再読み込みなし)
+- 4つのTab同時読み込み(要約/字幕/マインドマップ/質問応答)
+- レスポンシブレイアウト、モバイル対応
+- 言語切替後に全内容を自動再生成
+
+---
+
+**開発ツール**: 本プロジェクトは Claude Code で開発しました。
