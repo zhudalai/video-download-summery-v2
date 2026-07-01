@@ -1,6 +1,6 @@
 """OpenRouter AI 总结模块 - 路由配置
 
-使用单一模型: openrouter/owl-alpha
+使用单一模型: openrouter/free
 """
 
 from dataclasses import dataclass
@@ -14,7 +14,7 @@ class RouteRule:
     temperature: float = 0.7
 
 
-MODEL = "openrouter/owl-alpha"
+MODEL = "openrouter/free"
 
 ROUTING_TABLE: dict[str, RouteRule] = {
     "zh": RouteRule(primary=MODEL, fallbacks=[], max_tokens=4096),
