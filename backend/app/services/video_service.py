@@ -243,14 +243,19 @@ def download_subtitles_text(url: str, language: str = 'en') -> Optional[str]:
     """
     output_dir = tempfile.mkdtemp(prefix="vds_sub_")
 
+    from app.config import get_settings
+    settings = get_settings()
+
     ydl_opts = _get_ydl_opts({
         'skip_download': True,
         'writesubtitles': True,
-        # 注意:不启用 writeautomaticsub,否则 yt-dlp 默认尝试下载 en 自动字幕(429)
+        # 根据配置决定是否下载自动字幕
+        # writeautomaticsub=True 会触发 YouTube 429 限流
+        'writeautomaticsub': settings.DOWNLOAD_AUTO_SUBTITLES,
         'subtitlesformat': 'srt',
         'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
     })
-    # 指定具体语言时才过滤;auto/空 → 下载所有人工字幕
+    # 指定具体语言时才过滤;auto/空 → 下载所有可用字幕
     if language and language.lower() not in ('auto', 'all', ''):
         ydl_opts['subtitleslangs'] = [language]
 

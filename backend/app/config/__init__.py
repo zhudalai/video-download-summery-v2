@@ -24,6 +24,12 @@ class Settings(BaseSettings):
     APP_URL: str = "http://localhost:8000"
     FRONTEND_URL: str = "http://localhost:5173"
 
+    # 字幕配置
+    # 是否下载自动生成字幕(YouTube 自动字幕可能触发 429 限流)
+    # False: 只下载人工字幕(默认,稳定)
+    # True: 同时下载自动字幕(可能触发 429,但能获取更多字幕)
+    DOWNLOAD_AUTO_SUBTITLES: bool = True
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
